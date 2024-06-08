@@ -1,7 +1,13 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Showcase_Chat.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Showcase_Chat.Hubs;
+using Showcase_Chat.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +19,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -35,11 +43,21 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "account",
+    pattern: "account/{action=Login}/{id?}",
+    defaults: new { controller = "Account", action = "Login" }); // Configureer de route voor inloggen
+app.MapControllerRoute(
+    name: "register",
+    pattern: "account/{action=Register}/{id?}",
+    defaults: new { controller = "Account", action = "Register" }); // Configureer de route voor registratie
+
 app.MapRazorPages();
 app.MapHub<ChatHub>("/chatHub");
 
