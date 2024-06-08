@@ -1,16 +1,41 @@
 ﻿@{
-    ViewData["Title"] = "Chat Page";
+    ViewData["Title"] = "Chat";
+    var userName = User.Identity.Name;
 }
+
+<h2>Chat</h2>
+
+<input type="hidden" id="userName" value="@userName" />
+
+<ul id="messagesList"></ul>
+<input type="text" id="messageInput" />
+<button id="sendButton">Send</button>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script src="~/js/chat.js"></script>
+}
+
+
+@* @{
+    ViewData["Title"] = "Chat";
+    var userName = User.Identity.Name;
+}
+
+<h2>Chat</h2>
+
+<input type="hidden" id="userName" value="@userName" />
+
 <div>
-    <ul id="messagesList"></ul>
     <input type="text" id="messageInput" />
     <button id="sendButton">Send</button>
+    <ul id="messagesList"></ul>
 </div>
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
     <script src="~/js/chat.js"></script>
-}
+} *@
 
 @* @page
 <div class="container">
