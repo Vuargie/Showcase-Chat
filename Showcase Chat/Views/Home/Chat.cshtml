@@ -5,11 +5,19 @@
 
 <h2>Chat</h2>
 
-<input type="hidden" id="userName" value="@userName" />
+<div style="display: flex;">
+    <div style="flex: 1;">
+        <ul id="messagesList"></ul>
+        <input type="text" id="messageInput" />
+        <button id="sendButton">Send</button>
+    </div>
+    <div style="width: 200px; margin-left: 20px;">
+        <h3>Users</h3>
+        <ul id="usersList"></ul>
+    </div>
+</div>
 
-<ul id="messagesList"></ul>
-<input type="text" id="messageInput" />
-<button id="sendButton">Send</button>
+<input type="hidden" id="userName" value="@userName" />
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>

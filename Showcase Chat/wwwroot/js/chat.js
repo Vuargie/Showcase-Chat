@@ -36,6 +36,22 @@ connection.on("MessageDeleted", function (messageId) {
     }
 });
 
+connection.on("UserJoined", function (user) {
+    addUserToList(user);
+});
+
+connection.on("UserLeft", function (user) {
+    removeUserFromList(user);
+});
+
+connection.on("UpdateUserList", function (users) {
+    var usersList = document.getElementById("usersList");
+    usersList.innerHTML = "";
+    users.forEach(function (user) {
+        addUserToList(user);
+    });
+});
+
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
 }).catch(function (err) {
@@ -51,3 +67,19 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     }
     event.preventDefault();
 });
+
+function addUserToList(user) {
+    var usersList = document.getElementById("usersList");
+    var li = document.createElement("li");
+    li.setAttribute("data-user", user);
+    li.textContent = user;
+    usersList.appendChild(li);
+}
+
+function removeUserFromList(user) {
+    var usersList = document.getElementById("usersList");
+    var li = usersList.querySelector(`li[data-user='${user}']`);
+    if (li) {
+        li.remove();
+    }
+}
