@@ -70,7 +70,7 @@ namespace Showcase_Chat.Areas.Identity.Pages.Account
                     "/Account/ConfirmEmail",
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                    protocol: Request.Scheme).Replace("localhost:6009", "leroyvlugger.hbo-ict.nl");
+                    protocol: Request.Scheme).Replace("localhost:6009", "leroyvlugger.hbo-ict.org");
             }
 
             return Page();
