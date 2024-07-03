@@ -2,7 +2,6 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-// Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (messageId, user, message) {
@@ -35,7 +34,8 @@ connection.on("MessageDeleted", function (messageId) {
 });
 
 connection.on("UserJoined", function (user) {
-    addUserToList(user);
+    // Voeg een vertraging toe voordat de gebruiker aan de lijst wordt toegevoegd
+    setTimeout(() => addUserToList(user), 500);  // 500 ms vertraging
 });
 
 connection.on("UserLeft", function (user) {
@@ -45,9 +45,12 @@ connection.on("UserLeft", function (user) {
 connection.on("UpdateUserList", function (users) {
     var usersList = document.getElementById("usersList");
     usersList.innerHTML = "";
-    users.forEach(function (user) {
-        addUserToList(user);
-    });
+    // Voeg een vertraging toe voordat de gebruikerslijst wordt bijgewerkt
+    setTimeout(() => {
+        users.forEach(function (user) {
+            addUserToList(user);
+        });
+    }, 500);  // 500 ms vertraging
 });
 
 connection.on("Kicked", function (message) {
@@ -78,6 +81,8 @@ function addUserToList(user) {
     li.textContent = user;
 
     var isAdmin = document.getElementById("isAdmin").value === "True";
+    console.log("isAdmin:", isAdmin); // Voeg deze regel toe voor debugging
+    console.log("currentUser:", document.getElementById("userName").value); // Voeg deze regel toe voor debugging
     if (isAdmin && user !== document.getElementById("userName").value) {
         var kickButton = document.createElement("button");
         kickButton.textContent = "Kick";
@@ -99,3 +104,4 @@ function removeUserFromList(user) {
         li.remove();
     }
 }
+
