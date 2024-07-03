@@ -2,7 +2,7 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-//Disable the send button until connection is established.
+// Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (messageId, user, message) {
@@ -10,12 +10,10 @@ connection.on("ReceiveMessage", function (messageId, user, message) {
     li.setAttribute("data-id", messageId);
 
     var currentUser = document.getElementById("userName").value;
-    console.log(`Current User: ${currentUser}, Message User: ${user}`); // Log om te debuggen
 
     var deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
 
-    // Controleer of de huidige gebruiker de eigenaar is van het bericht
     if (user === currentUser) {
         deleteButton.onclick = function () {
             connection.invoke("DeleteMessage", messageId).catch(function (err) {
@@ -52,6 +50,11 @@ connection.on("UpdateUserList", function (users) {
     });
 });
 
+connection.on("Kicked", function (message) {
+    alert(message);
+    window.location.href = "/";
+});
+
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
 }).catch(function (err) {
@@ -59,8 +62,8 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var message = document.getElementById("messageInput").value.trim(); // Trim om lege ruimtes te verwijderen
-    if (message !== "") { // Controleer op leeg bericht
+    var message = document.getElementById("messageInput").value.trim();
+    if (message !== "") {
         connection.invoke("SendMessage", message).catch(function (err) {
             return console.error(err.toString());
         });
@@ -73,6 +76,19 @@ function addUserToList(user) {
     var li = document.createElement("li");
     li.setAttribute("data-user", user);
     li.textContent = user;
+
+    var isAdmin = document.getElementById("isAdmin").value === "True";
+    if (isAdmin && user !== document.getElementById("userName").value) {
+        var kickButton = document.createElement("button");
+        kickButton.textContent = "Kick";
+        kickButton.onclick = function () {
+            connection.invoke("KickUser", user).catch(function (err) {
+                return console.error(err.toString());
+            });
+        };
+        li.appendChild(kickButton);
+    }
+
     usersList.appendChild(li);
 }
 

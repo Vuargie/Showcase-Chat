@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Chat";
     var userName = User.Identity.Name;
+    var isAdmin = User.IsInRole("Admin") ? "True" : "False";
 }
 
 <h2>Chat</h2>
@@ -18,6 +19,7 @@
 </div>
 
 <input type="hidden" id="userName" value="@userName" />
+<input type="hidden" id="isAdmin" value="@isAdmin" />
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>

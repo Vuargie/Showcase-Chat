@@ -68,5 +68,19 @@ namespace Showcase_Chat.Hubs
                 await Clients.All.SendAsync("MessageDeleted", messageId);
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task KickUser(string userName)
+        {
+            var connectionId = ConnectedUsers.FirstOrDefault(u => u.Value == userName).Key;
+            if (connectionId != null)
+            {
+                await Clients.Client(connectionId).SendAsync("Kicked", "You have been kicked by an admin.");
+                ConnectedUsers.TryRemove(connectionId, out _);
+                await Clients.All.SendAsync("UserLeft", userName);
+                await Task.Delay(500); // Delay to allow the message to be sent before disconnecting
+                Context.Abort();
+            }
+        }
     }
 }
