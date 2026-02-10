@@ -50,15 +50,6 @@ namespace Showcase_Chat.Hubs
             await Clients.All.SendAsync("ReceiveMessage", newMessage.Id, userName, message);
         }
 
-        /*        public async Task SendMessage(string message)
-                {
-                    var userName = Context.User.Identity.Name;
-                    var messageId = Guid.NewGuid().ToString(); // Generate a unique ID for the message
-                    await Clients.All.SendAsync("ReceiveMessage", messageId, userName, message);
-                }*/
-
-
-
         public async Task DeleteMessage(string messageId)
         {
             var message = Messages.FirstOrDefault(m => m.Id == messageId);

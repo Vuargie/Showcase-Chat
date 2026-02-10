@@ -34,7 +34,6 @@ connection.on("MessageDeleted", function (messageId) {
 });
 
 connection.on("UserJoined", function (user) {
-    // Voeg een vertraging toe voordat de gebruiker aan de lijst wordt toegevoegd
     setTimeout(() => addUserToList(user), 500);  // 500 ms vertraging
 });
 
@@ -45,7 +44,6 @@ connection.on("UserLeft", function (user) {
 connection.on("UpdateUserList", function (users) {
     var usersList = document.getElementById("usersList");
     usersList.innerHTML = "";
-    // Voeg een vertraging toe voordat de gebruikerslijst wordt bijgewerkt
     setTimeout(() => {
         users.forEach(function (user) {
             addUserToList(user);
@@ -81,21 +79,26 @@ function addUserToList(user) {
     li.textContent = user;
 
     var isAdmin = document.getElementById("isAdmin").value === "True";
-    console.log("isAdmin:", isAdmin); // Voeg deze regel toe voor debugging
-    console.log("currentUser:", document.getElementById("userName").value); // Voeg deze regel toe voor debugging
+    console.log("isAdmin:", isAdmin); // Regel voor debugging
+    console.log("currentUser:", document.getElementById("userName").value); // Regel voor debugging
+    console.log("Adding user to list:", user); // Regel voor debugging
     if (isAdmin && user !== document.getElementById("userName").value) {
         var kickButton = document.createElement("button");
         kickButton.textContent = "Kick";
+        console.log("Adding kick button for user:", user); // Regel voor debugging
         kickButton.onclick = function () {
             connection.invoke("KickUser", user).catch(function (err) {
                 return console.error(err.toString());
             });
         };
         li.appendChild(kickButton);
+    } else {
+        console.log("Not adding kick button for user:", user); // Regel voor debugging
     }
 
     usersList.appendChild(li);
 }
+
 
 function removeUserFromList(user) {
     var usersList = document.getElementById("usersList");
@@ -104,4 +107,5 @@ function removeUserFromList(user) {
         li.remove();
     }
 }
+
 
